@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `shop_history` (
   `player` int(11) NOT NULL,
   `date` datetime NOT NULL,
   `title` varchar(100) NOT NULL,
-  `price` int(11) NOT NULL,
+  `cost` int(11) NOT NULL,
   `count` int(11) NOT NULL DEFAULT '0',
   `target` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
