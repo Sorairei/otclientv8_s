@@ -183,7 +183,7 @@ function onGameStoreUpdateHistory(historyList)
   -- count
   currentPage = 1
   history = historyList
-  totalPages = math.ceil(#history / entriesPerPage)
+  totalPages = math.max(1, math.ceil(#history / entriesPerPage))
 
   local historyPanel = gameStoreWindow:getChildById("history")
   updateHistory()
