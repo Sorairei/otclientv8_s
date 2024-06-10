@@ -234,20 +234,20 @@ function defaultBlessingCallback(player, offer)
 end
 
 function defaultOutfitCallback(player, offer)
-	if player:hasOutfit(offer.id, 3) then
-		return "You already have this outfit with addons."
+	if player:hasOutfit(offer.id, offer.count) then
+		return "You already have this outfit."
 	end
 
-	player:addOutfitAddon(offer.id, 3)
+	player:addOutfitAddon(offer.id, offer.count)
 	return false
 end
 
 function defaultMountCallback(player, offer)
-	if player:hasMount(offer.id) then
+	if player:hasMount(0, offer.id) then
 		return "You already have this mount."
 	end
 
-	if not player:addMount(offer.id) then
+	if not player:addMount(0, offer.id) then
 		return "Something went wrong, mount cannot be added."
 	end
 
@@ -304,7 +304,7 @@ function defaultChangeNameCallback(player, offer)
     end
 
 	local characterName = offer.nick:trim()
-	local v = getValid(characterName:lower(), false) -- true se quiser que toda primeira letra seja maiÃºscula
+	local v = getValid(characterName:lower(), false)
 	if not validName(v) then
 		return "You can't use this character name."
 	end

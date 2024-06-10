@@ -9700,16 +9700,27 @@ int LuaScriptInterface::luaPlayerSendOutfitWindow(lua_State* L)
 }
 
 int LuaScriptInterface::luaPlayerAddMount(lua_State* L) {
-	// player:addMount(mountId or mountName)
+	// player:addMount(mountId or mountName[, clientId])
 	Player* player = getUserdata<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	uint16_t mountId;
+	uint16_t clientId = getNumber<uint16_t>(L, 3, 0);
+	uint8_t mountId;
 	if (isNumber(L, 2)) {
-		mountId = getNumber<uint16_t>(L, 2);
+		if (clientId != 0) {
+			Mount* mount = g_game.mounts.getMountByClientID(clientId);
+			if (!mount) {
+				lua_pushnil(L);
+				return 1;
+			}
+			mountId = mount->id;
+		}
+		else {
+			mountId = getNumber<uint8_t>(L, 2);
+		}
 	} else {
 		Mount* mount = g_game.mounts.getMountByName(getString(L, 2));
 		if (!mount) {
@@ -9746,17 +9757,20 @@ int LuaScriptInterface::luaPlayerRemoveMount(lua_State* L) {
 }
 
 int LuaScriptInterface::luaPlayerHasMount(lua_State* L) {
-	// player:hasMount(mountId or mountName)
+	// player:hasMount(mountId or mountName[, clientId])
 	const Player* player = getUserdata<const Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
+	uint16_t clientId = getNumber<uint16_t>(L, 3, 0);
 	Mount* mount = nullptr;
 	if (isNumber(L, 2)) {
-		mount = g_game.mounts.getMountByClientID(getNumber<uint16_t>(L, 2));
-		if (!mount) {
+		if (clientId != 0) {
+			mount = g_game.mounts.getMountByClientID(clientId);
+		}
+		else {
 			mount = g_game.mounts.getMountByID(getNumber<uint8_t>(L, 2));
 		}
 	} else {
