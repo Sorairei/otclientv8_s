@@ -39,4 +39,3 @@ MainWindow
     anchors.left: parent.left
     anchors.right: parent.right
     margin-top: 5
-
