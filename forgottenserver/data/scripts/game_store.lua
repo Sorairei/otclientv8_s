@@ -151,7 +151,7 @@ function gameStorePurchase(player, offer)
 
 			local aid = player:getAccountId()
 			local escapeName = db.escapeString(offers[i].name)
-			local escapePrice = db.escapeString(offers[i].price)
+			local escapePrice = db.escapeString(-offers[i].price)
 			local escapeCount = offers[i].count and db.escapeString(offers[i].count) or 0
 
 			db.query("UPDATE `znote_accounts` set `points` = `points` - " .. offers[i].price .. " WHERE `id` = " .. aid)
@@ -484,7 +484,7 @@ function gameStoreChangeName(player, offer)
 
 			local aid = player:getAccountId()
 			local escapeTitle = db.escapeString(offers[i].title)
-			local escapePrice = db.escapeString(offers[i].price)
+			local escapePrice = db.escapeString(-offers[i].price)
 			local escapeCount = offers[i].count and db.escapeString(offers[i].count) or 0
 			db.query("UPDATE `znote_accounts` set `points` = `points` - " .. offers[i].price .. " WHERE `id` = " .. aid)
 			db.asyncQuery("INSERT INTO `shop_history` VALUES (NULL, '" .. aid .. "', '" .. player:getGuid() .. "', NOW(), " .. escapeTitle .. ", " .. escapePrice .. ", " .. escapeCount .. ", NULL)")
@@ -502,7 +502,7 @@ function gameStoreTransferCoins(player, transfer)
 	local receiver = transfer.target
 	local amount = transfer.amount
 	if not receiver then
-		return errorMsg(player, "Target player not found! Make sure the receiver is online")
+		return errorMsg(player, "Target player not found!")
 	end
 
 	local points = getPoints(player)
@@ -510,31 +510,47 @@ function gameStoreTransferCoins(player, transfer)
 		return errorMsg(player, "You don't have enough points!")
 	end
 
-	local targetPlayer = Player(receiver)
-	if not targetPlayer then
-		return errorMsg(player, "Target player not found! Make sure the receiver is online")
+	if receiver:lower() == player:getName():lower() then
+		return errorMsg(player, "You can't transfer coins to yourself.")
 	end
 
-	if receiver:lower() == player:getName():lower() then
+	local accountId = 0
+	local GUID = 0
+	local resultId = db.storeQuery("SELECT `id`, `account_id` FROM `players` WHERE `name` = " .. db.escapeString(receiver))
+	if resultId ~= false then
+		accountId = result.getDataInt(resultId, "account_id")
+		GUID = result.getDataInt(resultId, "id")
+		result.free(resultId)
+	end
+
+	if accountId == 0 then
+		return errorMsg(player, "Target player not found!")
+	end
+
+	if accountId == player:getAccountId() then
 		return errorMsg(player, "You can't transfer coins to yourself.")
 	end
 
 	local aid = player:getAccountId()
 	local title = "Coin Transfer"
 	local escapeTitle = db.escapeString(title)
-	local escapePrice = db.escapeString(amount)
 	local escapeCount = 1
-	local escapeTarget = db.escapeString(targetPlayer:getName())
 	db.query("UPDATE `znote_accounts` set `points` = `points` - " .. amount .. " WHERE `id` = " .. aid)
-	db.asyncQuery("INSERT INTO `shop_history` VALUES (NULL, '" .. aid .. "', '" .. player:getGuid() .. "', NOW(), " .. escapeTitle .. ", " .. escapePrice .. ", " .. escapeCount .. ", " .. escapeTarget .. ")")
+	db.query("UPDATE `znote_accounts` set `points` = `points` + " .. amount .. " WHERE `id` = " .. accountId)
+	
+	db.asyncQuery("INSERT INTO `shop_history` VALUES (NULL, '" .. aid .. "', '" .. player:getGuid() .. "', NOW(), " .. escapeTitle .. ", " .. db.escapeString(-amount) .. ", " .. escapeCount .. ", " .. db.escapeString(receiver) .. ")")
+	db.asyncQuery("INSERT INTO `shop_history` VALUES (NULL, '" .. accountId .. "', '" .. GUID .. "', NOW(), " .. escapeTitle .. ", " .. db.escapeString(amount) .. ", " .. escapeCount .. ", " .. db.escapeString(player:getName()) .. ")")
 
-	local targetaid = targetPlayer:getAccountId()
-	db.query("UPDATE `znote_accounts` set `points` = `points` + " .. amount .. " WHERE `id` = " .. targetaid)
 	addEvent(gameStoreUpdateHistory, 1000, player:getId())
 	addEvent(gameStoreUpdatePoints, 1000, player:getId())
-	addEvent(gameStoreUpdateHistory, 1000, targetPlayer:getId())
-	addEvent(gameStoreUpdatePoints, 1000, targetPlayer:getId())
-	return infoMsg(player, "You've sent " .. amount .. " coins to " .. targetPlayer:getName() .. "!", true)
+	
+	local targetPlayer = Player(receiver)
+	if targetPlayer then
+		addEvent(gameStoreUpdateHistory, 1000, targetPlayer:getId())
+		addEvent(gameStoreUpdatePoints, 1000, targetPlayer:getId())
+	end
+	
+	return infoMsg(player, "You've sent " .. amount .. " coins to " .. receiver .. "!", true)
 end
 
 function getPoints(player)
