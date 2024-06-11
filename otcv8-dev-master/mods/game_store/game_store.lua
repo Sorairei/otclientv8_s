@@ -110,6 +110,11 @@ function destroy()
     changeNameWindow:destroy()
     changeNameWindow = nil
   end
+
+  if transferWindow then
+    transferWindow:destroy()
+    transferWindow = nil
+  end
   
   selected = nil
   selectedOffer = nil
@@ -123,7 +128,14 @@ function onGameStoreFetchBase(data)
   DONATION_URL = data.url
 end
 
+function hideTransferWindow()
+  if transferWindow then
+    transferWindow:hide()
+  end
+end
+
 function show()
+  hideTransferWindow()
   if not gameStoreWindow or not gameStoreButton then
     return
   end
@@ -135,6 +147,7 @@ function show()
 end
 
 function hide()
+  hideTransferWindow()
   if gameStoreWindow then
     gameStoreWindow:hide()
   end
@@ -164,7 +177,8 @@ function updateHistory()
   for i = index, math.min(#history, index + entriesPerPage - 1) do
     local widget = g_ui.createWidget("HistoryWidget", historyList)
     widget:getChildById("date"):setText(history[i].date)
-    widget:getChildById("price"):setText("-" .. comma_value(history[i].price))
+    widget:getChildById("price"):setText((history[i].price > 0 and "+" or "") .. comma_value(history[i].price))
+    widget:getChildById("price"):setOn(history[i].price > 0)
 
     if history[i].count > 1 then
       widget:getChildById("description"):setText(history[i].count .. " " .. history[i].name)
