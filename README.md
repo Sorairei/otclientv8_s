@@ -1,10 +1,12 @@
 ```sql
+```sql
 CREATE TABLE `znote_accounts` (
   `id` int(11) NOT NULL,
   `account_id` int(11) NOT NULL,
   `ip` bigint(20) UNSIGNED NOT NULL,
   `created` int(11) NOT NULL,
   `points` int(11) DEFAULT 0,
+  `points_second` int(11) DEFAULT 0,
   `cooldown` int(11) DEFAULT 0,
   `active` tinyint(4) NOT NULL DEFAULT 0,
   `active_email` tinyint(4) NOT NULL DEFAULT 0,
@@ -19,7 +21,8 @@ CREATE TABLE IF NOT EXISTS `shop_history` (
   `player` int(11) NOT NULL,
   `date` datetime NOT NULL,
   `title` varchar(100) NOT NULL,
-  `cost` int(11) NOT NULL,
+  `price` int(11) NOT NULL,
+  `costSecond` int(11) NOT NULL,
   `count` int(11) NOT NULL DEFAULT '0',
   `target` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -61,3 +64,4 @@ CREATE TABLE IF NOT EXISTS `change_name_history` (
     PRIMARY KEY (`id`),
     FOREIGN KEY (`player_id`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
+
