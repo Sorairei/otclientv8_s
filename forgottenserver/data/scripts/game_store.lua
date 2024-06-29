@@ -1,6 +1,7 @@
 local DONATION_URL = "https://xangelserver.com/donate.php"
 
 local GAME_STORE = nil
+local SECOND_CURRENCY_ENABLED = true
 
 local LoginEvent = CreatureEvent("GameStoreLogin")
 
@@ -49,52 +50,77 @@ function gameStoreInitialize()
 		offers = {}
 	}
 	
-	addCategory(nil, "Premium Time", 20, CATEGORY_PREMIUM, "Enhance your gaming experience by gaining additional abilities and advantages:\n\n• access to Premium areas\n• use Tibia's transport system (ships, carpet)\n• more spells\n• rent houses\n• found guilds\n• offline training\n• larger Depots\n• and many more\n\n- valid for all characters on this account\n- activated at purchase")
-	addItem("Premium Time", "30 Days of Premium Time", "30_days", 250, 30)
-	addItem("Premium Time", "90 Days of Premium Time", "90_days", 750, 90)
-	addItem("Premium Time", "180 Days of Premium Time", "180_days", 1500, 180)
-	addItem("Premium Time", "360 Days of Premium Time", "360_days", 3000, 360)
+	addCategory(nil, "Premium Time", 20, CATEGORY_PREMIUM, "Enhance your gaming experience by gaining additional abilities and advantages:\n\n� access to Premium areas\n� use Tibia's transport system (ships, carpet)\n� more spells\n� rent houses\n� found guilds\n� offline training\n� larger Depots\n� and many more\n\n- valid for all characters on this account\n- activated at purchase")
+	addItem("Premium Time", "30 Days of Premium Time", "30_days", 250, false, 30)
+	addItem("Premium Time", "90 Days of Premium Time", "90_days", 750, false, 90)
+	addItem("Premium Time", "180 Days of Premium Time", "180_days", 1500, false, 180)
+	addItem("Premium Time", "360 Days of Premium Time", "360_days", 3000, false, 360)
 
 	addCategory(nil, "Consumables", 6, CATEGORY_NONE)
-	addCategory("Consumables", "Blessings", 8, CATEGORY_BLESSING, "Reduces your character's chance to lose any items as well as the amount of your character's experience and skill loss upon death:\n\n• 1 blessing = 8.00% less Skill / XP loss, 30% equipment protection\n• 2 blessing = 16.00% less Skill / XP loss, 55% equipment protection\n• 3 blessing = 24.00% less Skill / XP loss, 75% equipment protection\n• 4 blessing = 32.00% less Skill / XP loss, 90% equipment protection\n• 5 blessing = 40.00% less Skill / XP loss, 100% equipment protection\n• 6 blessing = 48.00% less Skill / XP loss, 100% equipment protection\n• 7 blessing = 56.00% less Skill / XP loss, 100% equipment protection\n\n- only usable by purchasing character\n- maximum amount that can be owned by character: 5\n- added directly to the Record of Blessings\n- characters with a red or black skull will always lose all equipment upon death")
-	addItem("Blessings", "All regular Blessings", "All_regular_Blessings", 130, -1)
-	addItem("Blessings", "The Spiritual Shielding", "The_Spiritual_Shielding", 25, 1)
-	addItem("Blessings", "The Embrace of Tibia", "The_Embrace_of_Tibia", 25, 2)
-	addItem("Blessings", "The Fire of the Suns", "The_Fire_of_the_Suns", 25, 3)
-	addItem("Blessings", "The Wisdom of Solitude", "The_Wisdom_of_Solitude", 25, 4)
-	addItem("Blessings", "The Spark of the Phoenix", "The_Spark_of_the_Phoenix", 25, 5)
+	addCategory("Consumables", "Blessings", 8, CATEGORY_BLESSING, "Reduces your character's chance to lose any items as well as the amount of your character's experience and skill loss upon death:\n\n� 1 blessing = 8.00% less Skill / XP loss, 30% equipment protection\n� 2 blessing = 16.00% less Skill / XP loss, 55% equipment protection\n� 3 blessing = 24.00% less Skill / XP loss, 75% equipment protection\n� 4 blessing = 32.00% less Skill / XP loss, 90% equipment protection\n� 5 blessing = 40.00% less Skill / XP loss, 100% equipment protection\n� 6 blessing = 48.00% less Skill / XP loss, 100% equipment protection\n� 7 blessing = 56.00% less Skill / XP loss, 100% equipment protection\n\n- only usable by purchasing character\n- maximum amount that can be owned by character: 5\n- added directly to the Record of Blessings\n- characters with a red or black skull will always lose all equipment upon death")
+	addItem("Blessings", "All regular Blessings", "All_regular_Blessings", 130, false, -1)
+	addItem("Blessings", "The Spiritual Shielding", "The_Spiritual_Shielding", 25, false, 1)
+	addItem("Blessings", "The Embrace of Tibia", "The_Embrace_of_Tibia", 25, false, 2)
+	addItem("Blessings", "The Fire of the Suns", "The_Fire_of_the_Suns", 25, false, 3)
+	addItem("Blessings", "The Wisdom of Solitude", "The_Wisdom_of_Solitude", 25, false, 4)
+	addItem("Blessings", "The Spark of the Phoenix", "The_Spark_of_the_Phoenix", 25, false, 5)
 
 	addCategory("Consumables", "Potions", 10, CATEGORY_ITEM)
-	addItem("Potions", "Mana Potion", 7620, 6, 125, MANA_POTION_DESCRIPTION)
-	addItem("Potions", "Mana Potion", 7620, 12, 300, MANA_POTION_DESCRIPTION)
-	addItem("Potions", "Strong Mana Potion", 7589, 7, 100, MANA_POTION_DESCRIPTION)
-	addItem("Potions", "Strong Mana Potion", 7589, 17, 250, MANA_POTION_DESCRIPTION)
-	addItem("Potions", "Great Mana Potion", 7590, 11, 100, MANA_POTION_DESCRIPTION)
-	addItem("Potions", "Great Mana Potion", 7590, 26, 250, MANA_POTION_DESCRIPTION)
-	addItem("Potions", "Health Potion", 7618, 6, 125, HEALTH_POTION_DESCRIPTION)
-	addItem("Potions", "Health Potion", 7618, 11, 300, HEALTH_POTION_DESCRIPTION)
-	addItem("Potions", "Strong Health Potion", 7588, 10, 100, HEALTH_POTION_DESCRIPTION)
-	addItem("Potions", "Strong Health Potion", 7588, 21, 250, HEALTH_POTION_DESCRIPTION)
-	addItem("Potions", "Great Health Potion", 7591, 18, 100, HEALTH_POTION_DESCRIPTION)
-	addItem("Potions", "Great Health Potion", 7591, 41, 250, HEALTH_POTION_DESCRIPTION)
+	addItem("Potions", "Mana Potion", 7620, 6, false, 125, MANA_POTION_DESCRIPTION)
+	addItem("Potions", "Mana Potion", 7620, 12, false, 300, MANA_POTION_DESCRIPTION)
+	addItem("Potions", "Strong Mana Potion", 7589, 7, false, 100, MANA_POTION_DESCRIPTION)
+	addItem("Potions", "Strong Mana Potion", 7589, 17, false, 250, MANA_POTION_DESCRIPTION)
+	addItem("Potions", "Great Mana Potion", 7590, 11, false, 100, MANA_POTION_DESCRIPTION)
+	addItem("Potions", "Great Mana Potion", 7590, 26, false, 250, MANA_POTION_DESCRIPTION)
+	addItem("Potions", "Health Potion", 7618, 6, false, 125, HEALTH_POTION_DESCRIPTION)
+	addItem("Potions", "Health Potion", 7618, 11, false, 300, HEALTH_POTION_DESCRIPTION)
+	addItem("Potions", "Strong Health Potion", 7588, 10, false, 100, HEALTH_POTION_DESCRIPTION)
+	addItem("Potions", "Strong Health Potion", 7588, 21, false, 250, HEALTH_POTION_DESCRIPTION)
+	addItem("Potions", "Great Health Potion", 7591, 18, false, 100, HEALTH_POTION_DESCRIPTION)
+	addItem("Potions", "Great Health Potion", 7591, 41, false, 250, HEALTH_POTION_DESCRIPTION)
 
 	addCategory(nil, "Cosmetics", 21, CATEGORY_NONE)
 	addCategory("Cosmetics", "Mounts", 14, CATEGORY_MOUNT)
-	addItem("Mounts", "Widow Queen", 368, 450, 1, "Badgers have been a staple of the Tibian fauna for a long time, and finally some daring souls have braved the challenge to tame some exceptional specimens - and succeeded! While the common badger you can encounter during your travels might seem like a rather unassuming creature, the Battle Badger, the Ether Badger, and the Zaoan Badger are fierce and mighty beasts, which are at your beck and call")
-	addItem("Mounts", "Racing Bird", 369, 450, 1, "Once captured and held captive by a mad hunter, the Woodland Prince is the result of sick experiments. Fed only with demon dust and concentrated demonic blood it had to endure a dreadful transformation. The demonic blood that is now running through its veins, however, provides it with incredible strength and endurance.")
-	addItem("Mounts", "War Bear", 370, 450, 1, "Do you like fluffy bunnies but think they are too small? Do you admire the majesty of stags and their antlers but are afraid of their untameable wilderness? Do not worry, the mystic creature Wolpertinger consolidates the best qualities of both animals. Hop on its backs and enjoy the ride.")
-	addItem("Mounts", "Black Sheep", 371, 450, 1, "Tenacity, strength and loyalty are the hallmarks of a Frostbringer, a Winterstride or an Icebreacher. Those travelling through barren lands, pursuing goals in forbidding environments, or simply wanting a comrade for a lifetime should fall back on this stalwart companion.")
+	addItem("Mounts", "Widow Queen", 368, 450, false, 1, "Badgers have been a staple of the Tibian fauna for a long time, and finally some daring souls have braved the challenge to tame some exceptional specimens - and succeeded! While the common badger you can encounter during your travels might seem like a rather unassuming creature, the Battle Badger, the Ether Badger, and the Zaoan Badger are fierce and mighty beasts, which are at your beck and call")
+	addItem("Mounts", "Racing Bird", 369, 450, false, 1, "Once captured and held captive by a mad hunter, the Woodland Prince is the result of sick experiments. Fed only with demon dust and concentrated demonic blood it had to endure a dreadful transformation. The demonic blood that is now running through its veins, however, provides it with incredible strength and endurance.")
+	addItem("Mounts", "War Bear", 370, 450, false, 1, "Do you like fluffy bunnies but think they are too small? Do you admire the majesty of stags and their antlers but are afraid of their untameable wilderness? Do not worry, the mystic creature Wolpertinger consolidates the best qualities of both animals. Hop on its backs and enjoy the ride.")
+	addItem("Mounts", "Black Sheep", 371, 450, false, 1, "Tenacity, strength and loyalty are the hallmarks of a Frostbringer, a Winterstride or an Icebreacher. Those travelling through barren lands, pursuing goals in forbidding environments, or simply wanting a comrade for a lifetime should fall back on this stalwart companion.")
 
 	addCategory("Cosmetics", "Outfits", 15, CATEGORY_OUTFIT)
-	addItem("Outfits", "Elementalist", 432, 450, 1, "The warm and cosy cloak of the Winter Warden outfit will keep you warm in every situation. Best thing, it is not only comfortable but fashionable as well. You will be the envy of any snow queen or king, guaranteed!")
-	addItem("Outfits", "Deepling", 463, 450, 1, "The Trailblazer is on a mission of enlightenment and carries the flame of wisdom near and far. The everlasting shine brightens the hearts and minds of all creatures its rays touch, bringing light even to the darkest corners of the world as a beacon of insight and knowledge.")
-	addItem("Outfits", "Insectoid", 465, 450, 1, "Do you worship warm temperatures and are opposed to the thought of long and dark winter nights? Do you refuse to spend countless evenings in front of your chimney while ice-cold wind whistles through the cracks and niches of your house? It is time to stop freezing and to become an honourable Sun Priest! With this stylish outfit, you can finally show the world your unconditional dedication and commitment to the sun!")
-	addItem("Outfits", "Entrepreneur", 472, 450, 1, "The mutated pumpkin is too weak for your mighty weapons? Time to show that evil vegetable how to scare the living daylight out of people! Put on a scary looking pumpkin on your head and spread terror and fear amongst the Tibian population.")
+	addItem("Outfits", "Elementalist", 432, 450, false, 1, "The warm and cosy cloak of the Winter Warden outfit will keep you warm in every situation. Best thing, it is not only comfortable but fashionable as well. You will be the envy of any snow queen or king, guaranteed!")
+	addItem("Outfits", "Deepling", 463, 450, false, 1, "The Trailblazer is on a mission of enlightenment and carries the flame of wisdom near and far. The everlasting shine brightens the hearts and minds of all creatures its rays touch, bringing light even to the darkest corners of the world as a beacon of insight and knowledge.")
+	addItem("Outfits", "Insectoid", 465, 450, false, 1, "Do you worship warm temperatures and are opposed to the thought of long and dark winter nights? Do you refuse to spend countless evenings in front of your chimney while ice-cold wind whistles through the cracks and niches of your house? It is time to stop freezing and to become an honourable Sun Priest! With this stylish outfit, you can finally show the world your unconditional dedication and commitment to the sun!")
+	addItem("Outfits", "Entrepreneur", 472, 450, false, 1, "The mutated pumpkin is too weak for your mighty weapons? Time to show that evil vegetable how to scare the living daylight out of people! Put on a scary looking pumpkin on your head and spread terror and fear amongst the Tibian population.")
 
 	addCategory(nil, "Extras", 9, CATEGORY_NONE)
 	addCategory("Extras", "Extra Services", 7, CATEGORY_EXTRAS)
-	addItem("Extra Services", "Name Change", "Name_Change", 250, 1, "Tired of your current character name? Purchase a new one!")
-	addItem("Extra Services", "Sex Change", "Sex_Change", 120, 1, "Turns your female character into a male one - or vice versa.")
+	addItem("Extra Services", "Name Change", "Name_Change", 250, false, 1, "Tired of your current character name? Purchase a new one!")
+	addItem("Extra Services", "Sex Change", "Sex_Change", 120, false, 1, "Turns your female character into a male one - or vice versa.")
+
+	addCategory(nil, "Task Points", 1, CATEGORY_NONE)
+	addCategory("Task Points", "Task Outfits", 15, CATEGORY_OUTFIT)
+	addItem("Task Outfits", "Elementalist", 432, 1500, true, 1, "The warm and cosy cloak of the Winter Warden outfit will keep you warm in every situation. Best thing, it is not only comfortable but fashionable as well. You will be the envy of any snow queen or king, guaranteed!")
+	addItem("Task Outfits", "Deepling", 463, 1500, true, 1, "The Trailblazer is on a mission of enlightenment and carries the flame of wisdom near and far. The everlasting shine brightens the hearts and minds of all creatures its rays touch, bringing light even to the darkest corners of the world as a beacon of insight and knowledge.")
+	addItem("Task Outfits", "Insectoid", 465, 1500, true, 1, "Do you worship warm temperatures and are opposed to the thought of long and dark winter nights? Do you refuse to spend countless evenings in front of your chimney while ice-cold wind whistles through the cracks and niches of your house? It is time to stop freezing and to become an honourable Sun Priest! With this stylish outfit, you can finally show the world your unconditional dedication and commitment to the sun!")
+	addItem("Task Outfits", "Entrepreneur", 472, 1500, true, 1, "The mutated pumpkin is too weak for your mighty weapons? Time to show that evil vegetable how to scare the living daylight out of people! Put on a scary looking pumpkin on your head and spread terror and fear amongst the Tibian population.")
+	
+	addCategory("Task Points", "Task Potions", 10, CATEGORY_ITEM)
+	addItem("Task Potions", "Mana Potion", 7620, 30, true, 125, MANA_POTION_DESCRIPTION)
+	addItem("Task Potions", "Mana Potion", 7620, 60, true, 300, MANA_POTION_DESCRIPTION)
+	addItem("Task Potions", "Strong Mana Potion", 7589, 35, true, 100, MANA_POTION_DESCRIPTION)
+	addItem("Task Potions", "Strong Mana Potion", 7589, 85, true, 250, MANA_POTION_DESCRIPTION)
+	addItem("Task Potions", "Great Mana Potion", 7590, 55, true, 100, MANA_POTION_DESCRIPTION)
+	addItem("Task Potions", "Great Mana Potion", 7590, 130, true, 250, MANA_POTION_DESCRIPTION)
+	addItem("Task Potions", "Health Potion", 7618, 30, true, 125, HEALTH_POTION_DESCRIPTION)
+	addItem("Task Potions", "Health Potion", 7618, 55, true, 300, HEALTH_POTION_DESCRIPTION)
+	addItem("Task Potions", "Strong Health Potion", 7588, 50, true, 100, HEALTH_POTION_DESCRIPTION)
+	addItem("Task Potions", "Strong Health Potion", 7588, 105, true, 250, HEALTH_POTION_DESCRIPTION)
+	addItem("Task Potions", "Great Health Potion", 7591, 90, true, 100, HEALTH_POTION_DESCRIPTION)
+	addItem("Task Potions", "Great Health Potion", 7591, 205, true, 250, HEALTH_POTION_DESCRIPTION)
+	
+	addCategory("Task Points", "Task Premium Time", 20, CATEGORY_PREMIUM, "Enhance your gaming experience by gaining additional abilities and advantages:\n\n� access to Premium areas\n� use Tibia's transport system (ships, carpet)\n� more spells\n� rent houses\n� found guilds\n� offline training\n� larger Depots\n� and many more\n\n- valid for all characters on this account\n- activated at purchase")
+	addItem("Task Premium Time", "30 Days of Premium Time", "30_days", 250, true, 30)
+	addItem("Task Premium Time", "90 Days of Premium Time", "90_days", 750, true, 90)
 end
 
 function addCategory(parent, title, iconId, categoryId, description)
@@ -108,7 +134,7 @@ function addCategory(parent, title, iconId, categoryId, description)
 	})
 end
 
-function addItem(parent, name, id, price, count, description)
+function addItem(parent, name, id, price, isSecondPrice, count, description)
 	if not GAME_STORE.offers[parent] then
 		GAME_STORE.offers[parent] = {}
 	end
@@ -124,6 +150,7 @@ function addItem(parent, name, id, price, count, description)
 		serverId = serverId,
 		id = id,
 		price = price,
+		isSecondPrice = isSecondPrice,
 		count = count,
 		description = description,
 		categoryId = GAME_STORE.categoriesId[parent]
@@ -138,7 +165,16 @@ function gameStorePurchase(player, offer)
 
 	for i = 1, #offers do
 		if offers[i].name == offer.name and offers[i].price == offer.price and offers[i].count == offer.count then
-			local points = getPoints(player)
+			local points = 0
+			local query = ""
+			if offers[i].isSecondPrice then
+				points = getSecondCurrency(player)
+				query = "points_second"
+			else
+				points = getPoints(player)
+				query = "points"
+			end
+			
 			if offers[i].price > points then
 				return errorMsg(player, "You don't have enough points!")
 			end
@@ -152,10 +188,14 @@ function gameStorePurchase(player, offer)
 			local aid = player:getAccountId()
 			local escapeName = db.escapeString(offers[i].name)
 			local escapePrice = db.escapeString(-offers[i].price)
+			local escapeIsSecondPrice = db.escapeString(offers[i].isSecondPrice and "1" or "0")
 			local escapeCount = offers[i].count and db.escapeString(offers[i].count) or 0
+			if GAME_STORE.categoriesId[offer.parent] == CATEGORY_PREMIUM then
+				escapeCount = 0
+			end
 
-			db.query("UPDATE `znote_accounts` set `points` = `points` - " .. offers[i].price .. " WHERE `id` = " .. aid)
-			db.asyncQuery("INSERT INTO `shop_history` VALUES (NULL, " .. aid .. ", " .. player:getGuid() .. ", NOW(), " .. escapeName .. ", " .. escapePrice .. ", " .. escapeCount .. ", NULL)")
+			db.query("UPDATE `znote_accounts` set `" .. query .. "` = `" .. query .. "` - " .. offers[i].price .. " WHERE `id` = " .. aid)
+			db.asyncQuery("INSERT INTO `shop_history` VALUES (NULL, " .. aid .. ", " .. player:getGuid() .. ", NOW(), " .. escapeName .. ", " .. escapePrice .. ", " .. escapeIsSecondPrice .. ", " .. escapeCount .. ", NULL)")
 			addEvent(gameStoreUpdateHistory, 1000, player:getId())
 			addEvent(gameStoreUpdatePoints, 1000, player:getId())
 			return infoMsg(player, "You've bought " .. offers[i].name .. "!", true)
@@ -375,7 +415,8 @@ function gameStoreUpdateHistory(player)
 		repeat
 			table.insert(history, {
 				date = result.getDataString(resultId, "date"),
-				price = result.getDataInt(resultId, "cost"),
+				price = result.getDataInt(resultId, "price"),
+				isSecondPrice = result.getDataInt(resultId, "costSecond") == 1,
 				name = result.getDataString(resultId, "title"),
 				count = result.getDataInt(resultId, "count")
 			})
@@ -439,7 +480,8 @@ function gameStoreUpdatePoints(player)
 		player = Player(player)
 	end
 
-	player:sendExtendedOpcode(ExtendedOPCodes.CODE_GAMESTORE, json.encode({action = "points", data = getPoints(player)}))
+	player:sendExtendedOpcode(ExtendedOPCodes.CODE_GAMESTORE, json.encode({action = "points", data = {
+		points = getPoints(player), secondPoints = getSecondCurrency(player)}}))
 end
 
 function gameStoreUpdatePointsAndRemovePlayer(player)
@@ -447,7 +489,8 @@ function gameStoreUpdatePointsAndRemovePlayer(player)
 		player = Player(player)
 	end
 
-	player:sendExtendedOpcode(ExtendedOPCodes.CODE_GAMESTORE, json.encode({action = "points", data = getPoints(player)}))
+	player:sendExtendedOpcode(ExtendedOPCodes.CODE_GAMESTORE, json.encode({action = "points", data = {
+		points = getPoints(player), secondPoints = getSecondCurrency(player)}}))
 	player:remove()
 end
 
@@ -485,9 +528,10 @@ function gameStoreChangeName(player, offer)
 			local aid = player:getAccountId()
 			local escapeTitle = db.escapeString(offers[i].title)
 			local escapePrice = db.escapeString(-offers[i].price)
+			local escapeIsSecondPrice = db.escapeString(-offers[i].isSecondPrice)
 			local escapeCount = offers[i].count and db.escapeString(offers[i].count) or 0
 			db.query("UPDATE `znote_accounts` set `points` = `points` - " .. offers[i].price .. " WHERE `id` = " .. aid)
-			db.asyncQuery("INSERT INTO `shop_history` VALUES (NULL, '" .. aid .. "', '" .. player:getGuid() .. "', NOW(), " .. escapeTitle .. ", " .. escapePrice .. ", " .. escapeCount .. ", NULL)")
+			db.asyncQuery("INSERT INTO `shop_history` VALUES (NULL, '" .. aid .. "', '" .. player:getGuid() .. "', NOW(), " .. escapeTitle .. ", " .. escapePrice .. ", " .. escapeIsSecondPrice .. ", " .. escapeCount .. ", NULL)")
 
 			addEvent(gameStoreUpdateHistory, 1000, player:getId())
 			addEvent(gameStoreUpdatePointsAndRemovePlayer, 1000, player:getId())
@@ -501,12 +545,12 @@ end
 function gameStoreTransferCoins(player, transfer)
 	local receiver = transfer.target
 	local amount = transfer.amount
+	local amountSecond = transfer.amountSecond
 	if not receiver then
 		return errorMsg(player, "Target player not found!")
 	end
 
-	local points = getPoints(player)
-	if amount > points then
+	if amount > getPoints(player) or amountSecond > getSecondCurrency(player) then
 		return errorMsg(player, "You don't have enough points!")
 	end
 
@@ -532,14 +576,23 @@ function gameStoreTransferCoins(player, transfer)
 	end
 
 	local aid = player:getAccountId()
-	local title = "Coin Transfer"
+	local title = "Coin Transfer from " .. player:getName() .. " to " .. receiver:sub(1, 1):upper() .. receiver:sub(2, receiver:len()):lower()
 	local escapeTitle = db.escapeString(title)
-	local escapeCount = 1
-	db.query("UPDATE `znote_accounts` set `points` = `points` - " .. amount .. " WHERE `id` = " .. aid)
-	db.query("UPDATE `znote_accounts` set `points` = `points` + " .. amount .. " WHERE `id` = " .. accountId)
+	if amount > 0 then
+		db.query("UPDATE `znote_accounts` set `points` = `points` - " .. amount .. " WHERE `id` = " .. aid)
+		db.query("UPDATE `znote_accounts` set `points` = `points` + " .. amount .. " WHERE `id` = " .. accountId)
+		
+		db.asyncQuery("INSERT INTO `shop_history` VALUES (NULL, '" .. aid .. "', '" .. player:getGuid() .. "', NOW(), " .. escapeTitle .. ", " .. db.escapeString(-amount) .. ", 0, 1, " .. db.escapeString(receiver) .. ")")
+		db.asyncQuery("INSERT INTO `shop_history` VALUES (NULL, '" .. accountId .. "', '" .. GUID .. "', NOW(), " .. escapeTitle .. ", " .. db.escapeString(amount) .. ", 0, 1, " .. db.escapeString(player:getName()) .. ")")
+	end
+
+	if amountSecond > 0 then
+		db.query("UPDATE `znote_accounts` set `points_second` = `points_second` - " .. amountSecond .. " WHERE `id` = " .. aid)
+		db.query("UPDATE `znote_accounts` set `points_second` = `points_second` + " .. amountSecond .. " WHERE `id` = " .. accountId)
 	
-	db.asyncQuery("INSERT INTO `shop_history` VALUES (NULL, '" .. aid .. "', '" .. player:getGuid() .. "', NOW(), " .. escapeTitle .. ", " .. db.escapeString(-amount) .. ", " .. escapeCount .. ", " .. db.escapeString(receiver) .. ")")
-	db.asyncQuery("INSERT INTO `shop_history` VALUES (NULL, '" .. accountId .. "', '" .. GUID .. "', NOW(), " .. escapeTitle .. ", " .. db.escapeString(amount) .. ", " .. escapeCount .. ", " .. db.escapeString(player:getName()) .. ")")
+		db.asyncQuery("INSERT INTO `shop_history` VALUES (NULL, '" .. aid .. "', '" .. player:getGuid() .. "', NOW(), " .. escapeTitle .. ", " .. db.escapeString(-amountSecond) .. ", 1, 1, " .. db.escapeString(receiver) .. ")")
+		db.asyncQuery("INSERT INTO `shop_history` VALUES (NULL, '" .. accountId .. "', '" .. GUID .. "', NOW(), " .. escapeTitle .. ", " .. db.escapeString(amountSecond) .. ", 1, 1, " .. db.escapeString(player:getName()) .. ")")
+	end
 
 	addEvent(gameStoreUpdateHistory, 1000, player:getId())
 	addEvent(gameStoreUpdatePoints, 1000, player:getId())
@@ -550,7 +603,16 @@ function gameStoreTransferCoins(player, transfer)
 		addEvent(gameStoreUpdatePoints, 1000, targetPlayer:getId())
 	end
 	
-	return infoMsg(player, "You've sent " .. amount .. " coins to " .. receiver .. "!", true)
+	local message = "You've sent "
+	if amount > 0 then
+		message = message .. amount .. " Tibia coins "
+	end
+
+	if amountSecond > 0 then
+		message = message .. (amount > 0 and " and " or "") .. amountSecond .. " Task points "
+	end
+
+	return infoMsg(player, message .. " to " .. receiver .. "!", true)
 end
 
 function getPoints(player)
@@ -558,6 +620,21 @@ function getPoints(player)
 	local resultId = db.storeQuery("SELECT `points` FROM `znote_accounts` WHERE `id` = " .. player:getAccountId())
 	if resultId ~= false then
 		points = result.getDataInt(resultId, "points")
+		result.free(resultId)
+	end
+
+	return points
+end
+
+function getSecondCurrency(player)
+	if not SECOND_CURRENCY_ENABLED then
+		return -1
+	end
+
+	local points = 0
+	local resultId = db.storeQuery("SELECT `points_second` FROM `znote_accounts` WHERE `id` = " .. player:getAccountId())
+	if resultId ~= false then
+		points = result.getDataInt(resultId, "points_second")
 		result.free(resultId)
 	end
 

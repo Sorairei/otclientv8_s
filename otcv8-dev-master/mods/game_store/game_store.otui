@@ -122,12 +122,15 @@ HistoryWidget < UIWidget
       color: #44AD25
 
   UIWidget
+    id: coin
     anchors.verticalcenter: parent.verticalcenter
     anchors.left: prev.right
     image-source: /images/store/coin
     margin-left: 6
     margin-bottom: 1
     phantom: true
+    $on:
+      image-source: /images/store/coin_second
 
   VerticalSeparator
     anchors.top: parent.top
@@ -177,6 +180,8 @@ OfferBuyPrice < FlatPanel
   focusable: false
   $disabled:
     color: #ff1f1f
+  $on:
+    icon: /images/store/coin_second
 
 OfferDescripionLabel < Label
   text-align: topLeft
@@ -198,9 +203,31 @@ StoreBalanceWidget < FlatPanel
     color: #C0C0C0
 
   UIWidget
+    id: coin
     anchors.right: parent.right
     anchors.verticalcenter: parent.verticalcenter
     image-source: /images/store/coin
+    margin-right: 3
+    phantom: true
+    $on:
+      image-source: /images/store/coin_second
+
+StoreBalanceSecondWidget < FlatPanel
+  image-color: #A0A0A0
+  focusable: false
+
+  Label
+    id: value
+    anchors.fill: parent
+    margin-right: 20
+    text-align: right
+    text: 0
+    color: #C0C0C0
+
+  UIWidget
+    anchors.right: parent.right
+    anchors.verticalcenter: parent.verticalcenter
+    image-source: /images/store/coin_second
     margin-right: 3
     phantom: true
 
@@ -382,6 +409,13 @@ MainWindow
     anchors.left: parent.left
     anchors.bottom: parent.bottom
 
+  StoreBalanceSecondWidget
+    id: balanceSecond
+    size: 105 21
+    margin-left: 6
+    anchors.top: prev.top
+    anchors.left: prev.right
+
   Button
     anchors.top: prev.top
     anchors.left: prev.right
@@ -400,6 +434,8 @@ MainWindow
     $pressed:
       text-offset: 17 1
       icon-offset: 41 5
+    $on:
+      icon: /images/store/coin_second
 
   Button
     anchors.top: prev.top

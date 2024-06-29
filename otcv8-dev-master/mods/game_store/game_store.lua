@@ -15,6 +15,7 @@ local msgWindow = nil
 local transferWindow = nil
 
 local premiumPoints = 0
+local premiumSecondPoints = -1
 
 local CATEGORY_NONE = -1
 local CATEGORY_PREMIUM = 0
@@ -179,6 +180,7 @@ function updateHistory()
     widget:getChildById("date"):setText(history[i].date)
     widget:getChildById("price"):setText((history[i].price > 0 and "+" or "") .. comma_value(history[i].price))
     widget:getChildById("price"):setOn(history[i].price > 0)
+    widget:getChildById("coin"):setOn(history[i].isSecondPrice)
 
     if history[i].count > 1 then
       widget:getChildById("description"):setText(history[i].count .. " " .. history[i].name)
@@ -264,6 +266,7 @@ function onGameStoreFetchOffers(data)
   -- name
   -- id
   -- price
+  -- isSecondPrice
   -- count
   -- description
   -- categoryId
@@ -298,9 +301,32 @@ function addCategory(data)
 end
 
 function onGameStoreUpdatePoints(data)
-  premiumPoints = tonumber(data)
+  premiumPoints = tonumber(data.points)
+  premiumSecondPoints = tonumber(data.secondPoints)
   local pointsWidget = gameStoreWindow:getChildById("balance"):getChildById("value")
   pointsWidget:setText(comma_value(premiumPoints))
+  
+  local balanceSecondWidget = gameStoreWindow:getChildById("balanceSecond")
+  if premiumSecondPoints ~= -1 then
+    balanceSecondWidget:getChildById("value"):setText(comma_value(premiumSecondPoints))
+    balanceSecondWidget:show()
+    balanceSecondWidget:setWidth(105)
+    balanceSecondWidget:setMarginLeft(6)
+    transferWindow.taskPointsLabelCoin:show()
+    transferWindow.taskPointsAmountScrollbar:show()
+    transferWindow.taskPointsCoin:show()
+    transferWindow.taskPointsBalance:show()
+    transferWindow.taskPointsBalance:setText(tr('Transferable Task points: ') .. comma_value(premiumSecondPoints))
+    transferWindow.taskPointsAmountScrollbar:setMaximum(premiumSecondPoints)
+  else
+    balanceSecondWidget:hide()
+    balanceSecondWidget:setWidth(1)
+    balanceSecondWidget:setMarginLeft(0)
+    transferWindow.taskPointsBalance:hide()
+    transferWindow.taskPointsLabelCoin:hide()
+    transferWindow.taskPointsAmountScrollbar:hide()
+    transferWindow.taskPointsCoin:hide()
+  end
 
   transferWindow.coinsBalance:setText(tr('Transferable Tibia Coins: ') .. comma_value(premiumPoints))
   transferWindow.coinsAmountScrollbar:setMaximum(premiumPoints)
@@ -369,13 +395,20 @@ function showOffers(id)
 
   for i = 1, #offersCache do
     local widget = offersList:getChildById(offersCache[i].name)
+    local price = offersCache[i].price
     if widget then
-      widget:getChildById("additionalPrice"):getChildById("value"):setText(comma_value(offersCache[i].price))
-      widget:getChildById("additionalCount"):setText(offersCache[i].count .. "x")
-      widget:getChildById("additionalPrice"):show()
-      widget:getChildById("additionalCount"):show()
+      local additionalPriceWidget = widget:getChildById("additionalPrice")
+      additionalPriceWidget:getChildById("coin"):setOn(offersCache[i].isSecondPrice)
+      additionalPriceWidget:getChildById("value"):setText(comma_value(price))
+      additionalPriceWidget:show()
+
+      local additionalCountWidget = widget:getChildById("additionalCount")
+      additionalCountWidget:setText(offersCache[i].count .. "x")
+      additionalCountWidget:show()
+
       widget:getChildById("count"):show()
-      widget.additionalPriceValue = offersCache[i].price
+      widget.additionalPriceValue = price
+      widget.additionalIsSecondPrice = isSecondPrice
       widget.additionalCountValue = offersCache[i].count
       
       if i == 2 then
@@ -383,7 +416,10 @@ function showOffers(id)
       end
     else
       local widget = g_ui.createWidget("OfferWidget", offersList)
-      widget:getChildById("price"):getChildById("value"):setText(comma_value(offersCache[i].price))
+      local priceWidget = widget:getChildById("price")
+      priceWidget:getChildById("coin"):setOn(offersCache[i].isSecondPrice)
+      priceWidget:getChildById("value"):setText(comma_value(price))
+
       widget:getChildById("name"):setText(offersCache[i].name)
       widget:getChildById("count"):setText(offersCache[i].count .. "x")
       widget:setId(offersCache[i].name)
@@ -398,6 +434,7 @@ function showOffers(id)
         image:setImageSource("/images/store/" .. offersCache[i].id)
       elseif type(offersCache[i].id) == "number" then
         local categoryId = offersCache[i].categoryId
+        widget.offerCategoryId = categoryId
         if categoryId == CATEGORY_ITEM then
           local item = imagePanel:getChildById("item")
           item:show()
@@ -445,26 +482,33 @@ function updateDescription(self)
   local additionalBuyButton = offerDetails:getChildById("additionalBuyButton")
   local additionalPriceWidget = offerDetails:getChildById("additionalPrice")
   
+  priceWidget:setOn(self.data.isSecondPrice)
   priceWidget:setText(comma_value(self.data.price))
-  priceWidget:setEnabled(self.data.price <= premiumPoints)
-  buyButton:setEnabled(self.data.price <= premiumPoints)
+
+  local globalPoints = self.data.isSecondPrice and premiumSecondPoints or premiumPoints
+  priceWidget:setEnabled(self.data.price <= globalPoints)
+  buyButton:setEnabled(self.data.price <= globalPoints)
+
   if self.additionalPriceValue and self.additionalCountValue then
     buyButton:setText("Buy " .. self.data.count)
 
-    additionalPriceWidget:setEnabled(self.additionalPriceValue <= premiumPoints)
+    additionalPriceWidget:setEnabled(self.additionalPriceValue <= globalPoints)
     additionalBuyButton:setText("Buy " .. self.additionalCountValue)
     additionalBuyButton:show()
-    additionalBuyButton:setEnabled(self.additionalPriceValue <= premiumPoints)
+    additionalBuyButton:setEnabled(self.additionalPriceValue <= globalPoints)
     additionalBuyButton.price = self.additionalPriceValue
     additionalBuyButton.count = self.additionalCountValue
+    buyButton.secondPrice = self.data.secondPrice
     buyButton.price = self.data.price
     buyButton.count = self.data.count
 
+    additionalPriceWidget:setOn(self.data.isSecondPrice)
     additionalPriceWidget:setText(comma_value(self.additionalPriceValue))
     additionalPriceWidget:show()
   else
     additionalBuyButton:hide()
 
+    buyButton.secondPrice = nil
     buyButton.price = nil
     buyButton.count = nil
 
@@ -486,7 +530,8 @@ function updateDescription(self)
     image:show()
     image:setImageSource("/images/store/" .. self.data.id)
   elseif type(self.data.id) == "number" then
-    local categoryId = categories[self.categoryId].categoryId
+    -- local categoryId = categories[self.categoryId].categoryId
+    local categoryId = self.offerCategoryId
     if categoryId == CATEGORY_ITEM then
       item:show()
       item:setItemId(self.data.id)
@@ -633,6 +678,10 @@ function changeCoinsAmount(value)
   transferWindow:getChildById("coinsAmountLabel"):setText("Amount to gift: " .. comma_value(value))
 end
 
+function changeTaskPointsAmount(value)
+  transferWindow:getChildById("taskPointsAmountLabel"):setText("Amount to gift: " .. comma_value(value))
+end
+
 function confirmGiftCoins()
   if not transferWindow then
     return
@@ -642,10 +691,12 @@ function confirmGiftCoins()
   if protocolGame then
     protocolGame:sendExtendedOpcode(GAME_STORE_CODE, json.encode({ action = "transfer", data = { 
       amount = tonumber(transferWindow.coinsAmountScrollbar:getValue()), 
+      amountSecond = tonumber(transferWindow.taskPointsAmountScrollbar:getValue()), 
       target = transferWindow.recipient:getText() 
     }}))
     transferWindow.recipient:setText('')
     transferWindow.coinsAmountScrollbar:setValue(0)
+    transferWindow.taskPointsAmountScrollbar:setValue(0)
   end
 end
 
@@ -681,6 +732,7 @@ function toggleGiftCoins()
     transferWindow:show()
     transferWindow:raise()
     transferWindow:focus()
+    transferWindow:setOn(premiumSecondPoints ~= -1)
   end
 end
 
@@ -706,7 +758,6 @@ function onSearch()
   end
 
   eraseSearchResults()
-
   addCategory({
     title = searchResultCategoryId,
     iconId = 7,

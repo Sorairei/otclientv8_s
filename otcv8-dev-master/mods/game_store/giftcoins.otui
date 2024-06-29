@@ -7,6 +7,8 @@ MainWindow
   size: 280 238
   color: #909090
   @onEscape: modules.game_store.cancelGiftCoins()
+  $on:
+    size: 280 300
 
   GiftCoinsLabel
     anchors.top: parent.top
@@ -68,10 +70,55 @@ MainWindow
     anchors.left: parent.left
     anchors.right: parent.right
     margin-top: 10
-    step: 1
+    step: 25
     minimum: 0
     maximum: 0
     @onValueChange: modules.game_store.changeCoinsAmount(self:getValue())
+
+  GiftCoinsLabel
+    id: taskPointsBalance
+    anchors.top: prev.bottom
+    anchors.left: parent.left
+    margin-top: 10
+    text-align: left
+    text-horizontal-auto-resize: true
+    text: Transferable Task points:
+
+  UIWidget
+    id: taskPointsCoin
+    anchors.left: prev.right
+    anchors.verticalcenter: prev.verticalcenter
+    image-source: /images/store/coin_second
+    margin-left: 6
+    phantom: true
+
+  GiftCoinsLabel
+    id: taskPointsAmountLabel
+    anchors.top: prev.bottom
+    anchors.left: parent.left
+    margin-top: 10
+    text-align: left
+    text-horizontal-auto-resize: true
+    text: Amount to gift: 0
+
+  UIWidget
+    id: taskPointsLabelCoin
+    anchors.left: prev.right
+    anchors.verticalcenter: prev.verticalcenter
+    image-source: /images/store/coin_second
+    margin-left: 6
+    phantom: true
+
+  HorizontalScrollBar
+    id: taskPointsAmountScrollbar
+    anchors.top: prev.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 10
+    step: 25
+    minimum: 0
+    maximum: 0
+    @onValueChange: modules.game_store.changeTaskPointsAmount(self:getValue())
 
   HorizontalSeparator
     anchors.right: parent.right
