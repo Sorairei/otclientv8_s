@@ -50,14 +50,14 @@ function gameStoreInitialize()
 		offers = {}
 	}
 	
-	addCategory(nil, "Premium Time", 20, CATEGORY_PREMIUM, "Enhance your gaming experience by gaining additional abilities and advantages:\n\n• access to Premium areas\n• use Tibia's transport system (ships, carpet)\n• more spells\n• rent houses\n• found guilds\n• offline training\n• larger Depots\n• and many more\n\n- valid for all characters on this account\n- activated at purchase")
+	addCategory(nil, "Premium Time", 20, CATEGORY_PREMIUM, "Enhance your gaming experience by gaining additional abilities and advantages:\n\nï¿½ access to Premium areas\nï¿½ use Tibia's transport system (ships, carpet)\nï¿½ more spells\nï¿½ rent houses\nï¿½ found guilds\nï¿½ offline training\nï¿½ larger Depots\nï¿½ and many more\n\n- valid for all characters on this account\n- activated at purchase")
 	addItem("Premium Time", "30 Days of Premium Time", "30_days", 250, false, 30)
 	addItem("Premium Time", "90 Days of Premium Time", "90_days", 750, false, 90)
 	addItem("Premium Time", "180 Days of Premium Time", "180_days", 1500, false, 180)
 	addItem("Premium Time", "360 Days of Premium Time", "360_days", 3000, false, 360)
 
 	addCategory(nil, "Consumables", 6, CATEGORY_NONE)
-	addCategory("Consumables", "Blessings", 8, CATEGORY_BLESSING, "Reduces your character's chance to lose any items as well as the amount of your character's experience and skill loss upon death:\n\n• 1 blessing = 8.00% less Skill / XP loss, 30% equipment protection\n• 2 blessing = 16.00% less Skill / XP loss, 55% equipment protection\n• 3 blessing = 24.00% less Skill / XP loss, 75% equipment protection\n• 4 blessing = 32.00% less Skill / XP loss, 90% equipment protection\n• 5 blessing = 40.00% less Skill / XP loss, 100% equipment protection\n• 6 blessing = 48.00% less Skill / XP loss, 100% equipment protection\n• 7 blessing = 56.00% less Skill / XP loss, 100% equipment protection\n\n- only usable by purchasing character\n- maximum amount that can be owned by character: 5\n- added directly to the Record of Blessings\n- characters with a red or black skull will always lose all equipment upon death")
+	addCategory("Consumables", "Blessings", 8, CATEGORY_BLESSING, "Reduces your character's chance to lose any items as well as the amount of your character's experience and skill loss upon death:\n\nï¿½ 1 blessing = 8.00% less Skill / XP loss, 30% equipment protection\nï¿½ 2 blessing = 16.00% less Skill / XP loss, 55% equipment protection\nï¿½ 3 blessing = 24.00% less Skill / XP loss, 75% equipment protection\nï¿½ 4 blessing = 32.00% less Skill / XP loss, 90% equipment protection\nï¿½ 5 blessing = 40.00% less Skill / XP loss, 100% equipment protection\nï¿½ 6 blessing = 48.00% less Skill / XP loss, 100% equipment protection\nï¿½ 7 blessing = 56.00% less Skill / XP loss, 100% equipment protection\n\n- only usable by purchasing character\n- maximum amount that can be owned by character: 5\n- added directly to the Record of Blessings\n- characters with a red or black skull will always lose all equipment upon death")
 	addItem("Blessings", "All regular Blessings", "All_regular_Blessings", 130, false, -1)
 	addItem("Blessings", "The Spiritual Shielding", "The_Spiritual_Shielding", 25, false, 1)
 	addItem("Blessings", "The Embrace of Tibia", "The_Embrace_of_Tibia", 25, false, 2)
@@ -118,7 +118,7 @@ function gameStoreInitialize()
 	addItem("Task Potions", "Great Health Potion", 7591, 90, true, 100, HEALTH_POTION_DESCRIPTION)
 	addItem("Task Potions", "Great Health Potion", 7591, 205, true, 250, HEALTH_POTION_DESCRIPTION)
 	
-	addCategory("Task Points", "Task Premium Time", 20, CATEGORY_PREMIUM, "Enhance your gaming experience by gaining additional abilities and advantages:\n\n• access to Premium areas\n• use Tibia's transport system (ships, carpet)\n• more spells\n• rent houses\n• found guilds\n• offline training\n• larger Depots\n• and many more\n\n- valid for all characters on this account\n- activated at purchase")
+	addCategory("Task Points", "Task Premium Time", 20, CATEGORY_PREMIUM, "Enhance your gaming experience by gaining additional abilities and advantages:\n\nï¿½ access to Premium areas\nï¿½ use Tibia's transport system (ships, carpet)\nï¿½ more spells\nï¿½ rent houses\nï¿½ found guilds\nï¿½ offline training\nï¿½ larger Depots\nï¿½ and many more\n\n- valid for all characters on this account\n- activated at purchase")
 	addItem("Task Premium Time", "30 Days of Premium Time", "30_days", 250, true, 30)
 	addItem("Task Premium Time", "90 Days of Premium Time", "90_days", 750, true, 90)
 end
